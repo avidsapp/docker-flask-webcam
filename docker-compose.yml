@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+  webcam:
+      build: .
+      volumes:
+          - '/tmp/.X11-unix:/tmp/.X11-unix'
+          - .:/app/
+      devices:
+          - /dev/video0:/dev/video0
+      environment:
+          PORT: 5000
+          FLASK_DEBUG: ${FLASK_DEBUG}
+          FLASK_ENV: ${FLASK_ENV}
+          FLASK_APP: ${WEBCAM_APP}
+          VIRTUAL_HOST: ${WEBCAM_DOMAIN}
+      ports:
+          - '5000:5000'
+      entrypoint:
+          - flask
+          - run
+          - --host=0.0.0.0
+
+networks:
+  default:
+    external:
+      name: ${NETWORK}
